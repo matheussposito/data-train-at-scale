@@ -4,6 +4,8 @@ import time
 from colorama import Fore, Style
 from typing import Tuple
 
+# from taxifare.utils import simple_time_and_memory_tracker
+
 # Timing the TF import
 print(Fore.BLUE + "\nLoading TensorFlow..." + Style.RESET_ALL)
 start = time.perf_counter()
@@ -48,6 +50,8 @@ def compile_model(model: Model, learning_rate=0.0005) -> Model:
 
     return model
 
+
+# @simple_time_and_memory_tracker
 def train_model(
         model: Model,
         X: np.ndarray,

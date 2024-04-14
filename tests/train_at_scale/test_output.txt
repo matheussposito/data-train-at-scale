@@ -6,37 +6,52 @@ configfile: pytest_kitt.ini
 collecting ... collected 8 items
 
 tests/train_at_scale/test_clean.py::test_clean_data PASSED               [ 12%]
-tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess_and_train PASSED [ 25%]
+tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess_and_train FAILED [ 25%]
 tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_pred PASSED [ 37%]
-tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess FAILED [ 50%]
+tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess PASSED [ 50%]
 tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_train FAILED [ 62%]
 tests/train_at_scale/test_model.py::test_model_can_fit PASSED            [ 75%]
 tests/train_at_scale/test_notebook.py::TestNotebook::test_y_pred PASSED  [ 87%]
 tests/train_at_scale/test_processor_pipeline.py::test_preprocess_features PASSED [100%]
 
 =================================== FAILURES ===================================
-_____________________ TestMainLocal.test_route_preprocess ______________________
+________________ TestMainLocal.test_route_preprocess_and_train _________________
 
-self = <tests.train_at_scale.test_main_local.TestMainLocal object at 0x7efee2cf9990>
-fixture_query_1k =      fare_amount           pickup_datetime  ...  dropoff_latitude  passenger_count
-0            8.9 2009-01-15 09:22:3...           4
-454          8.5 2014-12-27 16:47:42+00:00  ...         40.771263                4
+self = <tests.train_at_scale.test_main_local.TestMainLocal object at 0x7f7ea010d3f0>
 
-[455 rows x 7 columns]
-fixture_processed_1k =            0    1    2    3    4    5   ...   60   61   62   63   64         65
-0    0.000000  0.0  0.0  0.0  1.0  0.0...0.0   6.500000
-446  0.428571  0.0  0.0  0.0  0.0  0.0  ...  0.0  0.0  0.0  0.0  0.0   8.500000
+    def test_route_preprocess_and_train(self):
+    
+        # 1) SETUP
+        data_query_path = Path(LOCAL_DATA_PATH).joinpath("raw",f"query_{MIN_DATE}_{MAX_DATE}_{DATA_SIZE}.csv")
+        data_query_exists = data_query_path.is_file()
+    
+        if data_query_exists:
+            # We start from a blank state. No cached files
+            shutil.copyfile(data_query_path, f'{data_query_path}_backup')
+            data_query_path.unlink()
+    
+        # 2) ACT
+>       from taxifare.interface.main_local import preprocess_and_train
+E       ImportError: cannot import name 'preprocess_and_train' from 'taxifare.interface.main_local' (/home/msposito/code/lewagon/07-ML-Ops/01-Train-at-scale/data-train-at-scale/taxifare/interface/main_local.py)
 
-[447 rows x 66 columns]
+tests/train_at_scale/test_main_local.py:33: ImportError
+----------------------------- Captured stdout call -----------------------------
+[34m
+Loading TensorFlow...[0m
 
-    def test_route_preprocess(self, fixture_query_1k: pd.DataFrame, fixture_processed_1k: pd.DataFrame):
->       from taxifare.interface.main_local import preprocess
-E       ImportError: cannot import name 'preprocess' from 'taxifare.interface.main_local' (/home/msposito/code/lewagon/07-ML-Ops/01-Train-at-scale/data-train-at-scale/taxifare/interface/main_local.py)
-
-tests/train_at_scale/test_main_local.py:67: ImportError
+✅ TensorFlow loaded (0.0s)
+----------------------------- Captured stderr call -----------------------------
+2024-04-14 20:37:53.060765: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-04-14 20:37:53.232176: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory
+2024-04-14 20:37:53.232216: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2024-04-14 20:37:53.274607: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-04-14 20:37:54.288958: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory
+2024-04-14 20:37:54.289046: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory
+2024-04-14 20:37:54.289057: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
 ________________________ TestMainLocal.test_route_train ________________________
 
-self = <tests.train_at_scale.test_main_local.TestMainLocal object at 0x7efee2cf99c0>
+self = <tests.train_at_scale.test_main_local.TestMainLocal object at 0x7f7ea010d810>
 
     def test_route_train(self):
     
@@ -58,8 +73,8 @@ tests/train_at_scale/test_main_local.py:126: ImportError
 ----------------------------- Captured stderr call -----------------------------
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  153k  100  153k    0     0   471k      0 --:--:-- --:--:-- --:--:--  470k
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  153k  100  153k    0     0   538k      0 --:--:-- --:--:-- --:--:--  538k
 =========================== short test summary info ============================
-FAILED tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess
+FAILED tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess_and_train
 FAILED tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_train
-================== 2 failed, 6 passed, 12 warnings in 27.11s ===================
+=================== 2 failed, 6 passed, 6 warnings in 17.85s ===================
