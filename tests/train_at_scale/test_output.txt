@@ -9,7 +9,7 @@ tests/train_at_scale/test_clean.py::test_clean_data PASSED               [ 12%]
 tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess_and_train FAILED [ 25%]
 tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_pred PASSED [ 37%]
 tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess PASSED [ 50%]
-tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_train FAILED [ 62%]
+tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_train PASSED [ 62%]
 tests/train_at_scale/test_model.py::test_model_can_fit PASSED            [ 75%]
 tests/train_at_scale/test_notebook.py::TestNotebook::test_y_pred PASSED  [ 87%]
 tests/train_at_scale/test_processor_pipeline.py::test_preprocess_features PASSED [100%]
@@ -17,7 +17,7 @@ tests/train_at_scale/test_processor_pipeline.py::test_preprocess_features PASSED
 =================================== FAILURES ===================================
 ________________ TestMainLocal.test_route_preprocess_and_train _________________
 
-self = <tests.train_at_scale.test_main_local.TestMainLocal object at 0x7f7ea010d3f0>
+self = <tests.train_at_scale.test_main_local.TestMainLocal object at 0x7fee1e6e15d0>
 
     def test_route_preprocess_and_train(self):
     
@@ -41,40 +41,14 @@ Loading TensorFlow...[0m
 
 ✅ TensorFlow loaded (0.0s)
 ----------------------------- Captured stderr call -----------------------------
-2024-04-14 20:37:53.060765: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+2024-04-14 20:59:23.675895: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2024-04-14 20:37:53.232176: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory
-2024-04-14 20:37:53.232216: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-2024-04-14 20:37:53.274607: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2024-04-14 20:37:54.288958: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory
-2024-04-14 20:37:54.289046: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory
-2024-04-14 20:37:54.289057: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
-________________________ TestMainLocal.test_route_train ________________________
-
-self = <tests.train_at_scale.test_main_local.TestMainLocal object at 0x7f7ea010d810>
-
-    def test_route_train(self):
-    
-        # SETUP
-        data_processed_path = Path(LOCAL_DATA_PATH).joinpath("processed",f"processed_{MIN_DATE}_{MAX_DATE}_{DATA_SIZE}.csv")
-        data_processed_exists = data_processed_path.is_file()
-        if data_processed_exists:
-            shutil.copyfile(data_processed_path, f'{data_processed_path}_backup')
-            data_processed_path.unlink()
-    
-        data_processed_fixture_path = "https://storage.googleapis.com/datascience-mlops/taxi-fare-ny/solutions/data_processed_fixture_2009-01-01_2015-01-01_1k.csv"
-        os.system(f"curl {data_processed_fixture_path} > {data_processed_path}")
-    
-        # ACT
->       from taxifare.interface.main_local import train
-E       ImportError: cannot import name 'train' from 'taxifare.interface.main_local' (/home/msposito/code/lewagon/07-ML-Ops/01-Train-at-scale/data-train-at-scale/taxifare/interface/main_local.py)
-
-tests/train_at_scale/test_main_local.py:126: ImportError
------------------------------ Captured stderr call -----------------------------
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  153k  100  153k    0     0   538k      0 --:--:-- --:--:-- --:--:--  538k
+2024-04-14 20:59:23.837855: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory
+2024-04-14 20:59:23.837895: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2024-04-14 20:59:23.871607: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-04-14 20:59:25.012387: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory
+2024-04-14 20:59:25.012471: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory
+2024-04-14 20:59:25.012482: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
 =========================== short test summary info ============================
 FAILED tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_preprocess_and_train
-FAILED tests/train_at_scale/test_main_local.py::TestMainLocal::test_route_train
-=================== 2 failed, 6 passed, 6 warnings in 17.85s ===================
+=================== 1 failed, 7 passed, 9 warnings in 30.70s ===================
